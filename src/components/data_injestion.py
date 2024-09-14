@@ -28,8 +28,7 @@ class DataInjestion:
             data.to_csv(DataInjestionConfig.train_data_path)
             logging.info('Read and wrote the data to artifacts')
             train_data,test_data = train_test_split(data,test_size=0.3,random_state=41)
-            
-            train_data.to_csv(DataInjestionConfig.train_data"C:\Projects\Used Car Price prediction\src\components\data_injestion.py"_path)
+            train_data.to_csv(DataInjestionConfig.train_data_path)
             test_data.to_csv(DataInjestionConfig.test_data_path)
             logging.info('Splitted the data in test and train datasets and pasted to artifacts')
             return (
