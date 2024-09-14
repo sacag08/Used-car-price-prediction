@@ -8,6 +8,8 @@ from dataclasses import dataclass
 from src.logger import logging
 from src.exception import CustomException
 
+from src.components.data_transformation import DataTransformation
+
 from sklearn.model_selection import train_test_split
 @dataclass
 class DataInjestionConfig:
@@ -40,5 +42,7 @@ class DataInjestion:
 
 if __name__ =="__main__":
     obj = DataInjestion()
-    print(obj.initiate_data_injestion())
-            
+    train_path,test_path = obj.initiate_data_injestion()
+    data_transformation = DataTransformation()
+    print(data_transformation.initiate_data_transformation(train_path=train_path,test_path=test_path))
+
