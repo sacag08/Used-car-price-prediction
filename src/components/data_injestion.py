@@ -9,6 +9,8 @@ from src.logger import logging
 from src.exception import CustomException
 
 from src.components.data_transformation import DataTransformation
+from src.components.model_trainer import ModelTraining
+from src.components.hyper_parameter_tuner import HyperparameterTuning
 
 from sklearn.model_selection import train_test_split
 @dataclass
@@ -44,5 +46,11 @@ if __name__ =="__main__":
     obj = DataInjestion()
     train_path,test_path = obj.initiate_data_injestion()
     data_transformation = DataTransformation()
-    print(data_transformation.initiate_data_transformation(train_path=train_path,test_path=test_path))
-
+    train_arr,test_arr,obj = data_transformation.initiate_data_transformation(train_path=train_path,test_path=test_path)
+    modeltraining = ModelTraining(train_data=train_arr,test_data=test_arr)
+    modeltraining.initiate_model_training()
+    xtrain = train_arr[:,:-1]
+    ytrain = train_arr[:,-1]
+    xtest = test_arr[:,:-1]
+    ytest = test_arr[:,-1]
+    HyperparameterTuning(xtrain,xtest,ytest,ytrain)
