@@ -6,8 +6,7 @@ import re
 from src.logger import logging
 from src.exception import CustomException
 from dataclasses import dataclass
-from src.utils import fill_fuel_type,save_object
-
+from src.utils import fill_fuel_type,save_object,load_object
 
 from sklearn.preprocessing import LabelEncoder,OneHotEncoder,StandardScaler,MinMaxScaler,MaxAbsScaler
 from sklearn.impute import SimpleImputer
@@ -167,3 +166,15 @@ class DataTransformation:
 
         except Exception as e:
             raise CustomException(e,sys)
+        
+    def transform_raw_data(self,raw_data_path,preprocessor_path):
+        try:
+            raw_data = pd.read_csv(raw_data_path)
+            extracted_raw_data = self.initiate_data_extraction(raw_data)
+            filled_raw_data = self.fill_missing_value(extracted_raw_data)
+            preprocessor = load_object(file_path=preprocessor_path)
+            transformed_raw_data = preprocessor.transform(filled_raw_data)
+            return transformed_raw_data
+        except Exception as e:
+            raise CustomException(e,sys)
+            
