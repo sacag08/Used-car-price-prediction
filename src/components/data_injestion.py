@@ -57,8 +57,8 @@ if __name__ =="__main__":
     ytrain = train_arr[:,-1]
     xtest = test_arr[:,:-1]
     ytest = test_arr[:,-1]
-    tuning = HyperparameterTuning(xtrain=xtrain,xtest=xtest,ytest=ytest,ytrain=ytrain)
-    tuning.initiate_hyperparameter_tuner(['XGBRegressor'])
+    # tuning = HyperparameterTuning(xtrain=xtrain,xtest=xtest,ytest=ytest,ytrain=ytrain)
+    # tuning.initiate_hyperparameter_tuner(['XGBRegressor'])
 
     transformed_raw_data = data_transformation.transform_raw_data(raw_data_path=raw_data_path,preprocessor_path = obj)
     predict = Prediction(raw_data=transformed_raw_data,train_data=train_arr,raw_path=raw_data_path)

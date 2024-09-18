@@ -36,8 +36,8 @@ class Prediction:
             raw_id = pd.read_csv(self.raw_path)['id']
             
             logging.info('Raw data transformed')
-            xgb_model = load_object(self.Data_Predictor_file_path.xgb_model_path)
-            lgb_model = load_object(self.Data_Predictor_file_path.lbg_model_path)
+            xgb_model = load_object(file_path=self.Data_Predictor_file_path.xgb_model_path)
+            lgb_model = load_object(file_path=self.Data_Predictor_file_path.lbg_model_path)
             logging.info('models loaded')
             vr = VotingRegressor(estimators=[
                 ('XGB',xgb_model),
