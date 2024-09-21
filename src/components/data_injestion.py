@@ -12,6 +12,7 @@ from src.components.data_transformation import DataTransformation
 from src.components.model_trainer import ModelTraining
 from src.components.hyper_parameter_tuner import HyperparameterTuning
 from src.components.data_predictor import Prediction
+from src.pipeline.predict_pipeline import PredictPipeline,CustomData
 
 from sklearn.model_selection import train_test_split
 @dataclass
@@ -53,13 +54,17 @@ if __name__ =="__main__":
     train_arr,test_arr,obj = data_transformation.initiate_data_transformation(train_path=train_path,test_path=test_path)
     # modeltraining = ModelTraining(train_data=train_arr,test_data=test_arr)
     # modeltraining.initiate_model_training()
-    xtrain = train_arr[:,:-1]
-    ytrain = train_arr[:,-1]
-    xtest = test_arr[:,:-1]
-    ytest = test_arr[:,-1]
+    # xtrain = train_arr[:,:-1]
+    # ytrain = train_arr[:,-1
+    # xtest = test_arr[:,:-1]
+    # ytest = test_arr[:,-1]
     # tuning = HyperparameterTuning(xtrain=xtrain,xtest=xtest,ytest=ytest,ytrain=ytrain)
-    # tuning.initiate_hyperparameter_tuner(['XGBRegressor'])
+    # tuning.initiate_hyperparameter_tuner(['LightGBM'])
 
-    transformed_raw_data = data_transformation.transform_raw_data(raw_data_path=raw_data_path,preprocessor_path = obj)
-    predict = Prediction(raw_data=transformed_raw_data,train_data=train_arr,raw_path=raw_data_path)
-    predict.predict_pipeline()
+    # transformed_raw_data = data_transformation.transform_raw_data_from_path(raw_data_path=raw_data_path,preprocessor_path = obj)
+    # predict = Prediction(raw_data=transformed_raw_data,train_data=train_arr,raw_path=raw_data_path)
+    # predict.predict_pipeline()
+    # data = CustomData(id='100', brand="Cherokee", model ="2021 Jeep Grand Cherokee", model_year = 2024, milage = 100250, fuel_type = "Gasoline", engine = "Pentastar 3.6L V6", transmission = "A/T", ext_col=  "Velvet Red Pearl Coat", int_col = "black", accident = "None Reported", clean_title = "Yes")
+    # d = data.get_data_as_dataframe()
+    # pred = PredictPipeline()
+    # print(pred.predict(data=d))

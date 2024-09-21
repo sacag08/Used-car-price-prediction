@@ -115,14 +115,16 @@ class HyperparameterTuning:
                     study = optuna.create_study(direction='minimize')
                     study.optimize(self.xgb_model_tuner, n_trials=50)
                     best_params = study.best_params
-                    save_object(obj=XGBRegressor(**best_params),file_path=self.HyperparameterTuningConfig.tuned_xgboost_model_path)
+                    obj=XGBRegressor(**best_params).fit(self.xtrain,self.ytrain)
+                    save_object(obj=obj,file_path=self.HyperparameterTuningConfig.tuned_xgboost_model_path)
                     return best_params
                 if model == 'LightGBM':
                     logging.info('LightGBM hyperparameter tuning started ')
                     study = optuna.create_study(direction='minimize')
                     study.optimize(self.tune_lgbm_model,n_trials=50)
                     best_params = study.best_params
-                    save_object(obj=LGBMRegressor(**best_params),file_path=self.HyperparameterTuningConfig.tuned_lgbm_model_path)
+                    obj=LGBMRegressor(**best_params).fit(self.xtrain,self.ytrain)
+                    save_object(obj=obj,file_path=self.HyperparameterTuningConfig.tuned_lgbm_model_path)
                     return best_params
 
         except Exception as e:
