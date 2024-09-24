@@ -167,7 +167,7 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e,sys)
         
-    def transform_raw_data_from_path(self,raw_data_path,preprocessor_path):
+    def transform_raw_data_path(self,raw_data_path,preprocessor_path):
         try:
             raw_data = pd.read_csv(raw_data_path)
             extracted_raw_data = self.initiate_data_extraction(raw_data)
