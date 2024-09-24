@@ -11,4 +11,5 @@ ipykernel
 lightgbm
 optuna
 optuna-integration[xgboost]
+streamlit
 -e .
