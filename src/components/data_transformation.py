@@ -188,3 +188,6 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e,sys)
             
+    # def create_feature_dictionary(self,df):
+    #     for columns in df.columns:
+            

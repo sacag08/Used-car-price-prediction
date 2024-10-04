@@ -10,7 +10,7 @@ from src.pipeline.predict_pipeline import PredictPipeline,CustomData
 st.title(" Welcome to Used Cars Price prediction model")
 st.write("Input Features")
 
-id : int = st.number_input("Enter Vehicle ID")
+id : int = 1
 brand :str = st.text_input("Enter the car brand of the vehicle")
 model :str = st.text_input("Enter the model of the vehicle")
 model_year :int = st.number_input("Enter model year of the vehicle")
@@ -31,4 +31,5 @@ else:
 data = CustomData(id=id, brand=brand, model =model, model_year = model_year, milage = milage, fuel_type = fuel_type, engine = engine, transmission = transmission, ext_col=  ext_col, int_col = int_col, accident = accident, clean_title = clean_title)
 d = data.get_data_as_dataframe()
 pred = PredictPipeline()
-st.write(f'The price pridect is {pred.predict(data=d)}')
+if data:
+    st.write(f'The price pridect is {pred.predict(data=d)}')
