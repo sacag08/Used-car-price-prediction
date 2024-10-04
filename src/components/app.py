@@ -22,7 +22,7 @@ transmission: str = st.selectbox("Enter the transmission type for the vehicle",o
 ext_col : str = st.selectbox("Enter the exterior color the vehicle",options=features['ext_col'])
 int_col :str = st.selectbox("Enter the  interior color the vehicle",options=features['int_col'])
 accident : str =  st.selectbox("Enter Yes/No if the vehicle had reported any accidents ",options=['Yes','No'])
-clean_title : str = st.text_input("Enter Yes/No if the vehicle has a clean title",options=['Yes','No'])
+clean_title : str = st.selectbox("Enter Yes/No if the vehicle has a clean title",options=['Yes','No'])
 
 if accident == 'Yes':
     accident = "At least 1 accident or damage reported"
