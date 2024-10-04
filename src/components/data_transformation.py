@@ -16,6 +16,7 @@ from sklearn.compose import ColumnTransformer
 @dataclass
 class DataTransfromationConfig:
     preprocessing_file_path: str=os.path.join('artifacts','preprocessing.pkl')
+    feature_names_path: str=os.path.join('artifacts','features.pkl')
 
 class DataTransformation:
     def __init__(self):
@@ -57,15 +58,15 @@ class DataTransformation:
             df['clean_title'].fillna('Yes' if 'None reported' in df['accident'] else 'No',inplace=True)
             for i in categorical_features:
                 df[i] = df[i].replace('–',most_common[i])
-            common_color = ['black', 'white', 'gray', 'silver', 'brown', 'red', 'blue', 'green',
+            colors = ['black', 'white', 'gray', 'silver', 'brown', 'red', 'blue', 'green',
                 'beige', 'tan', 'orange', 'gold', 'yellow', 'purple', 'pink', 
                 'charcoal', 'ivory', 'camel', 'chestnut', 'pearl', 'linen', 'graphite',
                 'copper', 'slate', 'bronze', 'sand', 'amber','macchiato','ebony','cocoa']
             
-            df['int_col'] = df['int_col'].apply(lambda x: x if [color for color in common_color if color in str.lower(x).split(' ')] == [] else [color for color in common_color if color in str.lower(x).split(' ')][0])
-            df['ext_col'] = df['ext_col'].apply(lambda x: x if [color for color in common_color if color in str.lower(x).split(' ')] == [] else [color for color in common_color if color in str.lower(x).split(' ')][0])
+            df['int_col'] = df['int_col'].apply(lambda x: x if [color for color in colors if color in str.lower(x).split(' ')] == [] else [color for color in colors if color in str.lower(x).split(' ')][0])
+            df['ext_col'] = df['ext_col'].apply(lambda x: x if [color for color in colors if color in str.lower(x).split(' ')] == [] else [color for color in colors if color in str.lower(x).split(' ')][0])
 
-
+            common_color = ['White','Gray','Black','Silver','Blue','Red','Green','Brown','Orange','Yellow']
             df['interior_rare_color'] = df['int_col'].apply(lambda x: 1 if str.lower(x) not in common_color else 0)
             df['exterior_rare_color'] = df['ext_col'].apply(lambda x: 1 if str.lower(x) not in common_color else 0)
             
@@ -85,7 +86,9 @@ class DataTransformation:
             model_sample = df['model'].value_counts()
             low_models_samples = list(model_sample[model_sample.values < 101].index)
             df['cleaned_model'] = df['model'].apply(lambda x: x if x not in low_models_samples else 'others')
-
+            brand_sample = df['brand'].value_counts()
+            low_brand_samples = list(brand_sample[brand_sample.values < 101].index)
+            df['cleaned_brand'] = df['brand'].apply(lambda x: x if x not in low_brand_samples else 'others')
             df.drop(['id','brand','engine','model_year','transmission'],axis=1,inplace=True)
             return df
         
@@ -95,7 +98,7 @@ class DataTransformation:
     def get_data_transformer_object(self):
         try:
             numeric_features = ['milage','hoursepower', 'capacity','Cylinder', 'interior_rare_color', 'exterior_rare_color','is_luxry_brand', 'age', 'mile/year']
-            categorical_features = ['cleaned_model','fuel_type','transmission_type','accident','clean_title','int_col','ext_col','model']
+            categorical_features = ['cleaned_model','fuel_type','transmission_type','accident','clean_title','int_col','ext_col','model','cleaned_brand']
             numeric_features_pipeline = Pipeline(
                 [   
                     ('fillna',SimpleImputer(strategy='median')),
@@ -128,6 +131,8 @@ class DataTransformation:
             test_dataframe = pd.read_csv(test_path)
             logging.info('Training and Test data read')
 
+            
+
             train_data = train_dataframe.drop(target_feature,axis=1)
             test_data = test_dataframe.drop(target_feature,axis=1)
 
@@ -142,6 +147,8 @@ class DataTransformation:
             filled_train_data = self.fill_missing_value(extracted_train_data)
             filled_test_data = self.fill_missing_value(extracted_test_data)
             logging.info('Data filling completed')
+
+            self.create_feature_dictionary(filled_train_data)
 
             preprocessor = self.get_data_transformer_object()
             logging.info('Preprocessor object returned')
@@ -188,6 +195,15 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e,sys)
             
-    # def create_feature_dictionary(self,df):
-    #     for columns in df.columns:
-            
+    def create_feature_dictionary(self,df):
+        try: 
+            fnames = {}
+            for column in ['cleaned_model','fuel_type','transmission_type','accident','clean_title','int_col','ext_col','model','cleaned_brand']:
+                fnames[column] = list(df[column].unique())
+            #pd.DataFrame(data = fnames).to_csv('artifacts/features.csv')
+            save_object(
+                obj = fnames,
+                file_path= self.DataTransfromationConfig.feature_names_path
+                )
+        except Exception as e:
+            raise CustomException(e,sys)

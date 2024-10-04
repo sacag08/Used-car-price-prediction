@@ -13,7 +13,9 @@ class PredictPipeline():
         try:
             model = load_object(file_path=os.path.join("artifacts","lgbm_tuned.pkl"))
             preprocesor = load_object(file_path=os.path.join("artifacts","preprocessing.pkl"))
-            transformed_data = preprocesor.transform(fill_missing_value(initiate_data_extraction(data)))
+            d1 = initiate_data_extraction(data)
+            d2 = fill_missing_value(d1)
+            transformed_data = preprocesor.transform(d2)
             pred = model.predict(transformed_data)
             return pred
         except Exception as e:

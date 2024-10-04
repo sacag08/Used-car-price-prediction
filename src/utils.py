@@ -55,26 +55,21 @@ def fill_missing_value(df):
         column = df.columns
         numeric_features = [feature for feature in df.columns if df[feature].dtype != 'O']
         categorical_features = [feature for feature in df.columns if df[feature].dtype == 'O']
-        most_common = dict()
-        for i in categorical_features:
-            value = str(df[i].value_counts()[:1].index.values[0])
-            most_common[i] = value
 
         df['fuel_type'] = df[['engine','fuel_type']].apply(lambda x : fill_fuel_type(x),axis=1)
         df['fuel_type'].fillna('Gasoline',inplace=True)
         df['accident'].fillna('None reported',inplace=True)
         df['clean_title'].fillna('Yes' if 'None reported' in df['accident'] else 'No',inplace=True)
-        for i in categorical_features:
-            df[i] = df[i].replace('–',most_common[i])
-        common_color = ['black', 'white', 'gray', 'silver', 'brown', 'red', 'blue', 'green',
-            'beige', 'tan', 'orange', 'gold', 'yellow', 'purple', 'pink', 
-            'charcoal', 'ivory', 'camel', 'chestnut', 'pearl', 'linen', 'graphite',
-            'copper', 'slate', 'bronze', 'sand', 'amber','macchiato','ebony','cocoa']
-        
-        df['int_col'] = df['int_col'].apply(lambda x: x if [color for color in common_color if color in str.lower(x).split(' ')] == [] else [color for color in common_color if color in str.lower(x).split(' ')][0])
-        df['ext_col'] = df['ext_col'].apply(lambda x: x if [color for color in common_color if color in str.lower(x).split(' ')] == [] else [color for color in common_color if color in str.lower(x).split(' ')][0])
 
+        colors = ['black', 'white', 'gray', 'silver', 'brown', 'red', 'blue', 'green',
+                'beige', 'tan', 'orange', 'gold', 'yellow', 'purple', 'pink', 
+                'charcoal', 'ivory', 'camel', 'chestnut', 'pearl', 'linen', 'graphite',
+                'copper', 'slate', 'bronze', 'sand', 'amber','macchiato','ebony','cocoa']
+            
+        df['int_col'] = df['int_col'].apply(lambda x: x if [color for color in colors if color in str.lower(x).split(' ')] == [] else [color for color in colors if color in str.lower(x).split(' ')][0])
+        df['ext_col'] = df['ext_col'].apply(lambda x: x if [color for color in colors if color in str.lower(x).split(' ')] == [] else [color for color in colors if color in str.lower(x).split(' ')][0])
 
+        common_color = ['White','Gray','Black','Silver','Blue','Red','Green','Brown','Orange','Yellow']
         df['interior_rare_color'] = df['int_col'].apply(lambda x: 1 if str.lower(x) not in common_color else 0)
         df['exterior_rare_color'] = df['ext_col'].apply(lambda x: 1 if str.lower(x) not in common_color else 0)
         
@@ -90,10 +85,10 @@ def fill_missing_value(df):
 
         df['mile/year'] = df['milage']/df['age']
 
-
-        model_sample = df['model'].value_counts()
-        low_models_samples = list(model_sample[model_sample.values < 101].index)
-        df['cleaned_model'] = df['model'].apply(lambda x: x if x not in low_models_samples else 'others')
+        
+        df['cleaned_model'] = df['model']
+        df['cleaned_brand'] = df['brand'].apply(lambda x: x if x not in ['Lucid', 'Mercury', 'Lotus', 'FIAT', 'Saab', 'Karma', 'Suzuki',
+       'Plymouth', 'Bugatti', 'Polestar', 'smart', 'Maybach'] else 'others')
 
         df.drop(['id','brand','engine','model_year','transmission'],axis=1,inplace=True)
         return df

@@ -51,6 +51,8 @@ class HyperparameterTuning:
             "lambda": trial.suggest_loguniform("lambda", 1e-5, 1.0),
             "alpha": trial.suggest_loguniform("alpha", 1e-5, 1.0),
         }
+        param['gpu_id'] = 0
+        param['tree_method'] = 'gpu_hist'
 
         if param["booster"] == "gbtree" or param["booster"] == "dart":
             param["max_depth"] = trial.suggest_int("max_depth", 1, 9)
@@ -113,7 +115,7 @@ class HyperparameterTuning:
                 if model == 'XGBRegressor':
                     logging.info('XGBoost HyperParameter tuning started')
                     study = optuna.create_study(direction='minimize')
-                    study.optimize(self.xgb_model_tuner, n_trials=50)
+                    study.optimize(self.xgb_model_tuner, n_trials=25)
                     best_params = study.best_params
                     obj=XGBRegressor(**best_params).fit(self.xtrain,self.ytrain)
                     save_object(obj=obj,file_path=self.HyperparameterTuningConfig.tuned_xgboost_model_path)

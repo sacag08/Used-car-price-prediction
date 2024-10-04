@@ -5,6 +5,7 @@ import pickle
 import sys
 from dataclasses import dataclass
 
+from src.utils import load_object
 from src.logger import logging
 from src.exception import CustomException
 
@@ -59,12 +60,13 @@ if __name__ =="__main__":
     # xtest = test_arr[:,:-1]
     # ytest = test_arr[:,-1]
     # tuning = HyperparameterTuning(xtrain=xtrain,xtest=xtest,ytest=ytest,ytrain=ytrain)
-    # tuning.initiate_hyperparameter_tuner(['XGBRegressor'])
+    # tuning.initiate_hyperparameter_tuner(['LightGBM'])
 
-    transformed_raw_data = data_transformation.transform_raw_data_path(raw_data_path=raw_data_path,preprocessor_path = obj)
-    predict = Prediction(raw_data=transformed_raw_data,train_data=train_arr,raw_path=raw_data_path)
-    predict.predict_pipeline()
-    data = CustomData(id='100', brand="Cherokee", model ="2021 Jeep Grand Cherokee", model_year = 2024, milage = 100250, fuel_type = "Gasoline", engine = "Pentastar 3.6L V6", transmission = "A/T", ext_col=  "Velvet Red Pearl Coat", int_col = "black", accident = "None Reported", clean_title = "Yes")
-    d = data.get_data_as_dataframe()
-    pred = PredictPipeline()
-    print(pred.predict(data=d))
+    # transformed_raw_data = data_transformation.transform_raw_data_path(raw_data_path=raw_data_path,preprocessor_path = obj)
+    # predict = Prediction(raw_data=transformed_raw_data,train_data=train_arr,raw_path=raw_data_path)
+    # predict.predict_pipeline()
+    # data = CustomData(id='100', brand="Porsche", model ="Macan S", model_year = 2016, milage = 54200, fuel_type = "Gasoline", engine = "340.0HP 3.0L V6 Cylinder Engine Gasoline Fuel", transmission = "A/T", ext_col=  "Velvet Red Pearl Coat", int_col = "black", accident = "None Reported", clean_title = "Yes")
+    # d = data.get_data_as_dataframe()
+    # pred = PredictPipeline()
+    # print(pred.predict(data=d))
+    print(load_object('C:/Projects/Used Car Price prediction/artifacts/features.pkl'))
